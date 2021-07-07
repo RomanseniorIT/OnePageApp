@@ -1,5 +1,7 @@
 package com.example.onepageapp
 
+import android.graphics.Point
+import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
@@ -24,14 +26,27 @@ class MainActivity : AppCompatActivity() {
 
     private fun initViews() {
         imageAdapter = ImageAdapter()
+        imageAdapter?.setHasStableIds(true)
         binding.rvPhotos.adapter = imageAdapter
+        binding.rvPhotos.setItemViewCacheSize(70)
+        binding.rvPhotos.setHasFixedSize(true)
         val columnCount = 10
-        val layoutManger = GridLayoutManager(
+        val point = Point()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            display?.getRealSize(point)
+        } else {
+            windowManager?.defaultDisplay?.getRealSize(point)
+        }
+        val screenWidth = point.x
+        val extraLayoutSpace = screenWidth * 2
+        val layoutManger = PreCashingLayoutManager(
             this,
             columnCount,
             RecyclerView.HORIZONTAL,
-            false
+            false,
+            extraLayoutSpace
         )
+        layoutManger.isSmoothScrollbarEnabled = true
         binding.rvPhotos.layoutManager = layoutManger
         val itemSpace = resources.getDimensionPixelSize(R.dimen.dimen_1pt)
         val imageDecoration = ImageDecoration(itemSpace)

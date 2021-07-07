@@ -36,6 +36,10 @@ class ImageAdapter() :
         return keyList.size
     }
 
+    override fun getItemId(position: Int): Long {
+        return keyList[position]
+    }
+
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
         holder.onBind(position)
     }
