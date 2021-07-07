@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">OnePageApp</string>
+    <string name="reload_all">Reload All</string>
+    <string name="image_descr">Some image</string>
 </resources>
