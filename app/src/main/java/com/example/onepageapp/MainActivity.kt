@@ -24,12 +24,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
-        imageAdapter = ImageAdapter()
-        imageAdapter?.setHasStableIds(true)
-        binding.rvPhotos.adapter = imageAdapter
-        binding.rvPhotos.setItemViewCacheSize(70)
-        binding.rvPhotos.setHasFixedSize(true)
-        val columnCount = 10
+        val rawCount = 10
+        val columnCount = 7
         val point = Point()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             display?.getRealSize(point)
@@ -40,14 +36,20 @@ class MainActivity : AppCompatActivity() {
         val extraLayoutSpace = screenWidth * 2
         val layoutManger = PreCashingLayoutManager(
             this,
-            columnCount,
+            rawCount,
             RecyclerView.HORIZONTAL,
             false,
             extraLayoutSpace
         )
         layoutManger.isSmoothScrollbarEnabled = true
         binding.rvPhotos.layoutManager = layoutManger
-        val itemSpace = resources.getDimensionPixelSize(R.dimen.dimen_1pt)
+        imageAdapter = ImageAdapter()
+        imageAdapter?.setHasStableIds(true)
+        GridPagerSnapHelper(rawCount, columnCount).attachToRecyclerView(binding.rvPhotos)
+        binding.rvPhotos.adapter = imageAdapter
+        binding.rvPhotos.setItemViewCacheSize(70)
+        binding.rvPhotos.setHasFixedSize(true)
+        val itemSpace = resources.getDimensionPixelSize(R.dimen.dimen_2pt)
         val imageDecoration = ImageDecoration(itemSpace)
         binding.rvPhotos.addItemDecoration(imageDecoration)
     }
